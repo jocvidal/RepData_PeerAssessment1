@@ -13,33 +13,47 @@ output:
 ```{r, echo=TRUE}
 library(data.table)
 setwd("C:/Users/Dalvin/Documents/experian/ejemplos de R/Reproducible Research/week2/course_project")
-#Load data
+```
+Load data
+```{r, echo=TRUE}
 activity      <- read.csv( "activity.csv" )
-#Transform variable date as a Date format
+
 activity$date <- as.Date(activity$date, format = "%Y-%m-%d")
 activity      <- as.data.table(activity)
 ```
+Transform variable date as a Date format
 
 ## What is mean total number of steps taken per day?
+Calculate the total number of steps taken per day
 ```{r}
-#Total number of steps taken per day
 step <- activity[ , .(step_per_day = sum(steps, na.rm = T)), by=date]
-#histogram of the total number of steps taken each day
+```
+
+Histogram of the total number of steps taken each day
+```{r}
 hist(step$step_per_day, main ="Histogram of the total number of steps taken each day",
      xlab = "Total number of step per day")
-#mean of the total number of steps taken per day
+```
+
+mean of the total number of steps taken per day
+```{r}
 mean(step$step_per_day)
-#median of the total number of steps taken per day
+```
+
+median of the total number of steps taken per day
+```{r}
 median(step$step_per_day)
 ```
 
 ## What is the average daily activity pattern?
-
+average number of steps taken across all days 
 ```{r}
-#average number of steps taken across all days 
 step<- activity[ , .(steps_int = mean(steps, na.rm = T)), by =interval]
 plot(step, type = "l", ylab="Number of steps", main="Daily activity pattern")
-#Interval with maximum number of steps
+```
+
+Interval with maximum number of steps
+```{r}
 step[ which.max(step$steps_int), interval ]
 ```
 
@@ -69,18 +83,17 @@ median(step_total$step_per_day)
 The mean of total number of steps difer in 1411.41 steps and the median difer in 367 steps. Imputing missing data impact in the mean, median and the distribution of total step, this will report more accurate estimation.
 
 ## Are there differences in activity patterns between weekdays and weekends?
-
+Create factor variable weekday
 ```{r}
-#Create factor variable weekday
 activity_new$weekday <- "weekday"
 activity_new$weekday[ weekdays(activity[,date]) %in% c("sábado", "domingo") ] <- "weekend"
 activity_new[, weekday:=as.factor(weekday)]
+```
 
-#Activity patterns between weekdays and weekends
+Activity patterns between weekdays and weekends
+```{r}
 step_int_2<- activity_new[ weekday=="weekday", .(steps_int = mean(steps, na.rm = T)), by = interval]
 plot(step_int_2, type = "l", ylab = "Number of steps", main = "Weekday", ylim = c(0,230))
 step_int_2<- activity_new[ weekday=="weekend", .(steps_int = mean(steps, na.rm = T)), by = interval]
 plot(step_int_2, type = "l", ylab = "Number of steps", main = "Weekend", ylim = c(0,230))
 ```
-
-

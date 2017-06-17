@@ -16,27 +16,36 @@ library(data.table)
 
 ```r
 setwd("C:/Users/Dalvin/Documents/experian/ejemplos de R/Reproducible Research/week2/course_project")
-#Load data
+```
+Load data
+
+```r
 activity      <- read.csv( "activity.csv" )
-#Transform variable date as a Date format
+
 activity$date <- as.Date(activity$date, format = "%Y-%m-%d")
 activity      <- as.data.table(activity)
 ```
+Transform variable date as a Date format
 
 ## What is mean total number of steps taken per day?
+Calculate the total number of steps taken per day
 
 ```r
-#Total number of steps taken per day
 step <- activity[ , .(step_per_day = sum(steps, na.rm = T)), by=date]
-#histogram of the total number of steps taken each day
+```
+
+Histogram of the total number of steps taken each day
+
+```r
 hist(step$step_per_day, main ="Histogram of the total number of steps taken each day",
      xlab = "Total number of step per day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+mean of the total number of steps taken per day
 
 ```r
-#mean of the total number of steps taken per day
 mean(step$step_per_day)
 ```
 
@@ -44,8 +53,9 @@ mean(step$step_per_day)
 ## [1] 9354.23
 ```
 
+median of the total number of steps taken per day
+
 ```r
-#median of the total number of steps taken per day
 median(step$step_per_day)
 ```
 
@@ -54,18 +64,18 @@ median(step$step_per_day)
 ```
 
 ## What is the average daily activity pattern?
-
+average number of steps taken across all days 
 
 ```r
-#average number of steps taken across all days 
 step<- activity[ , .(steps_int = mean(steps, na.rm = T)), by =interval]
 plot(step, type = "l", ylab="Number of steps", main="Daily activity pattern")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
+Interval with maximum number of steps
 
 ```r
-#Interval with maximum number of steps
 step[ which.max(step$steps_int), interval ]
 ```
 
@@ -102,7 +112,7 @@ hist(step_total$step_per_day, main ="Histogram of the total number of steps take
      xlab = "Total number of step per day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 ```r
 #mean of the total number of steps taken per day
@@ -125,26 +135,26 @@ median(step_total$step_per_day)
 The mean of total number of steps difer in 1411.41 steps and the median difer in 367 steps. Imputing missing data impact in the mean, median and the distribution of total step, this will report more accurate estimation.
 
 ## Are there differences in activity patterns between weekdays and weekends?
-
+Create factor variable weekday
 
 ```r
-#Create factor variable weekday
 activity_new$weekday <- "weekday"
 activity_new$weekday[ weekdays(activity[,date]) %in% c("sábado", "domingo") ] <- "weekend"
 activity_new[, weekday:=as.factor(weekday)]
+```
 
-#Activity patterns between weekdays and weekends
+Activity patterns between weekdays and weekends
+
+```r
 step_int_2<- activity_new[ weekday=="weekday", .(steps_int = mean(steps, na.rm = T)), by = interval]
 plot(step_int_2, type = "l", ylab = "Number of steps", main = "Weekday", ylim = c(0,230))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 ```r
 step_int_2<- activity_new[ weekday=="weekend", .(steps_int = mean(steps, na.rm = T)), by = interval]
 plot(step_int_2, type = "l", ylab = "Number of steps", main = "Weekend", ylim = c(0,230))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-2.png)<!-- -->
-
-
+![](PA1_template_files/figure-html/unnamed-chunk-11-2.png)<!-- -->
