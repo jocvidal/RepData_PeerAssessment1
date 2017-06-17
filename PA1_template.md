@@ -122,18 +122,6 @@ median(step_total$step_per_day)
 ## [1] 10762
 ```
 
-```r
-# > mean(step$step_per_day)
-# [1] 9354.23
-# > median(step$step_per_day)
-# [1] 10395
-
-# > mean(step_2$step_per_day)
-# [1] 10765.64
-# > median(step_2$step_per_day)
-# [1] 10762
-```
-
 The mean of total number of steps difer in 1411.41 steps and the median difer in 367 steps. Imputing missing data impact in the mean, median and the distribution of total step, this will report more accurate estimation.
 
 ## Are there differences in activity patterns between weekdays and weekends?
